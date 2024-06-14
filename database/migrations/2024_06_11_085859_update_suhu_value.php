@@ -14,7 +14,7 @@ class UpdateSuhuValue extends Migration
     public function up()
     {
         Schema::table('suhu', function (Blueprint $table) {
-            $table->double('value');
+            $table->double('value')->after('topic_name')->nullable();
         });
     }
 

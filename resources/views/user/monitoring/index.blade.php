@@ -22,7 +22,7 @@
                                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
                                                 @foreach ($data_trafo as $trf)
                                                     <a class="dropdown-item"
-                                                        href="{{ route('id_monitoring', $trf->id) }}">{{ $trf->name }}</a>
+                                                        href="{{ route('admin_id_monitoring', $trf->id) }}">{{ $trf->name }}</a>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -30,7 +30,7 @@
                                 </div>
                                 {{-- <div id="periodeArusTeganganChart"></div> --}}
                                 <div id="periodeChartTes"></div>
-                                <p class="mt-2"> Monitoring Arus dan Tegangan Pada Bulan Sebelumnya</p>
+                                <p class="mt-2"> Monitoring Arus dan Tegangan Sebelumnya</p>
                             </div>
                         </div>
                     </div>
@@ -45,10 +45,6 @@
                                 <div class="row d-flex justify-content-right">
                                     <div class="col-sm-8">
                                         <h5 class="card-title text-primary">Arus</h5>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        {{-- <a href="{{ route('cetak_arus') }}" class="btn btn-sm btn-outline-primary">Cetak
-                                            Data</a> --}}
                                     </div>
                                 </div>
                                 <div id="arus1Chart"></div>
@@ -66,9 +62,6 @@
                                     <div class="col-sm-6">
                                         <h5 class="card-title text-primary">Tegangan</h5>
                                     </div>
-                                    {{-- <div class="col-sm-6">
-                                        <a href="javascript:;" class="btn btn-sm btn-outline-primary">Cetak Data</a>
-                                    </div> --}}
                                 </div>
                                 <div id="tegangan1Chart"></div>
                             </div>
@@ -92,6 +85,7 @@
 
         var MQTTsubTopiczmct = '{{ $pilih_trafo->arus->topic_name }}';
 
+
         // var MQTTsubTopic1 = 'test/dht11/temp_c';
         // var MQTTsubTopic2 = 'test/dht11/humi';
         var MQTTusername = 'hivemq.webclient.1716793886740';
@@ -99,6 +93,7 @@
 
         var zmctData = "";
         var zmptData = "";
+
 
 
         // Fungsi untuk memperbarui grafik dengan data baru
@@ -121,7 +116,7 @@
         let zmctDataArray = [];
         let zmptDataArray = [];
         let timeLabels = []; // Array untuk menyimpan label waktu
-
+        console.log("asjdnaksjdn" + zmctDataArray);
         // Di dalam fungsi onMessageArrived, panggil fungsi updateArusChart dengan data baru
         function onMessageArrived(message) {
             let currentTime = new Date();
@@ -151,10 +146,9 @@
                 updatePeriodeChart();
                 // Jika Anda juga ingin memperbarui grafik untuk zmptData, tambahkan pemanggilan fungsi updateArusChart di sini
             }
-            console.log([
-                zmctDataArray,
-                zmptDataArray
-            ])
+
+            var trafo_id = window.location.href.split('/').pop();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
         }
 
         let periodeChartTes = null;

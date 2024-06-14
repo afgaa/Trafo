@@ -14,7 +14,7 @@ class UpdateTekananValue extends Migration
     public function up()
     {
         Schema::table('tekanan', function (Blueprint $table) {
-            $table->double('value');
+            $table->double('value')->after('topic_name')->nullable();
         });
     }
 

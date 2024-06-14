@@ -52,11 +52,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin_monitoring/{id_trafo}', [MonitoringAdminController::class, 'filter_trafo'])->name('admin_id_monitoring');
         // Route::get('/admin_dmcr', [DMCRAdminController::class, 'index'])->name('admin_dmcr');
         Route::get('/admin_dmcr/{id_trafo}', [DMCRAdminController::class, 'filter_trafo'])->name('admin_id_dmcr');
-        Route::get('/arus/download', [MonitoringAdminController::class, 'export_arus'])->name('cetak_arus');
-        Route::get('/suhu/download', [MonitoringAdminController::class, 'export_suhu'])->name('cetak_suhu');
-        Route::get('/tekanan/download', [MonitoringAdminController::class, 'export_tekanan'])->name('cetak_tekanan');
+        Route::get('/arus/download', [MonitoringAdminController::class, 'exportArus'])->name('cetak_arus');
+        Route::get('/suhu/download', [DMCRAdminController::class, 'exportSuhu'])->name('cetak_suhu');
+        Route::get('/tekanan/download', [DMCRAdminController::class, 'exportTekanan'])->name('cetak_tekanan');
         Route::get('/tegangan/download', [MonitoringAdminController::class, 'exportTegangan'])->name('cetak_tegangan');
+
+        // SIMPAN DATA TEGANGAN ZMPT DAN ZMCT
         Route::post('/tegangan/store', [MonitoringAdminController::class, 'storeTegangan'])->name('store_tegangan');
+        Route::post('/arus/store', [MonitoringAdminController::class, 'storeArus'])->name('store_arus');
+        Route::post('/suhu/store', [DMCRAdminController::class, 'storeSuhu'])->name('store_suhu');
+        Route::post('/tekanan/store', [DMCRAdminController::class, 'storeTekanan'])->name('store_tekanan');
+        
     });
 
     // Route untuk user

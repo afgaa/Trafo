@@ -18,7 +18,7 @@
                                 <label class="form-label" for="basic-icon-default-fullname">Trafo</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
-                                    <input type="text" class="form-control" id="trafo_name" aria-describedby="name"
+                                    <input type="text" class="form-control" id="" aria-describedby="name"
                                         name="trafo_name" />
                                 </div>
                             </div>

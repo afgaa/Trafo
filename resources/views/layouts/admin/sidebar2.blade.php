@@ -1,7 +1,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-      <a href="{{route('dashboard')}}" class="app-brand-link">
-        {{-- <span class="app-brand-logo demo">
+        <a href="{{ route('dashboard') }}" class="app-brand-link">
+            {{-- <span class="app-brand-logo demo">
           <svg
             width="25"
             viewBox="0 0 25 42"
@@ -56,65 +56,65 @@
             </g>
           </svg>
         </span> --}}
-        {{-- <span class="app-brand-text demo menu-text fw-bolder ms-2">Monitoring</span> --}}
-        <span class="app-brand-logo demo">
-            <img src="{{ asset('img/logo.png') }}" alt="Brand Logo" width="60">
-        </span>
-        {{-- <span class="app-brand-text demo menu-text fw-bolder">Admin Monitoring</span> --}}
-        <h4>Admin Monitoring</h4>
-        <hr>
-      </a>
+            {{-- <span class="app-brand-text demo menu-text fw-bolder ms-2">Monitoring</span> --}}
+            <span class="app-brand-logo demo">
+                <img src="{{ asset('img/logo.png') }}" alt="Brand Logo" width="60">
+            </span>
+            {{-- <span class="app-brand-text demo menu-text fw-bolder">Admin Monitoring</span> --}}
+            <h4>Admin Monitoring</h4>
+            <hr>
+        </a>
 
-      <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-        <i class="bx bx-chevron-left bx-sm align-middle"></i>
-      </a>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
     </div>
 
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-      <!-- Dashboard -->
-      <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-        <a href="{{ route('dashboard')}}" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-home-circle"></i>
-          <div data-i18n="Analytics">Dashboard</div>
-        </a>
-      </li>
-      <li class="menu-item {{ request()->routeIs('trafo.index') ? 'active' : ''}}">
-        <a href="{{ route('trafo.index') }}" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-cube"></i>
-          <div data-i18n="Basic">Trafo</div>
-        </a>
-      </li>
-      <li class="menu-item {{ request()->routeIs('admin_id_monitoring',1) ? 'active' : ''}}">
-        <a href="{{ route('admin_id_monitoring',1) }}" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-cube"></i>
-          <div data-i18n="Basic">Monitoring</div>
-        </a>
-      </li>
-      <li class="menu-item {{ request()->routeIs('admin_id_dmcr,1') ? 'active' : ''}}">
-        <a href="{{ route('admin_id_dmcr',1) }}" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-cube"></i>
-          <div data-i18n="Basic">DMCR</div>
-        </a>
-      </li>
-      <li class="menu-item {{request()->routeIs('user.index') ? 'active' : ''}}">
-        <a href="{{ route('user.index') }}" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-cube"></i>
-          <div data-i18n="Basic">User</div>
-        </a>
-      </li>
-      <li class="menu-item">
-        <a href="{{ route('logout') }}" class="menu-link"
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="menu-icon tf-icons bx bx-log-out-circle"></i>
-            <div data-i18n="Basic">Logout</div>
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-            @csrf
-        </form>
-      </li>
-      {{-- <li class="menu-item">
+        <!-- Dashboard -->
+        <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a href="{{ route('dashboard') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('trafo.index') ? 'active' : '' }}">
+            <a href="{{ route('trafo.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube"></i>
+                <div data-i18n="Basic">Trafo</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('admin_id_monitoring', 1) ? 'active' : '' }}">
+            <a href="{{ route('admin_id_monitoring', 1) }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube"></i>
+                <div data-i18n="Basic">Monitoring</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('admin_id_dmcr') && request()->route('id') == 1 ? 'active' : '' }}">
+            <a href="{{ route('admin_id_dmcr', 1) }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube"></i>
+                <div data-i18n="Basic">DMCR</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
+            <a href="{{ route('user.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube"></i>
+                <div data-i18n="Basic">User</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="{{ route('logout') }}" class="menu-link"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="menu-icon tf-icons bx bx-log-out-circle"></i>
+                <div data-i18n="Basic">Logout</div>
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+        </li>
+        {{-- <li class="menu-item">
         <a href="{{ route('suhu') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-cube"></i>
           <div data-i18n="Basic">Suhu</div>
@@ -132,13 +132,13 @@
           <div data-i18n="Basic">Tekanan</div>
         </a>
       </li> --}}
-      
-      <!-- Layouts -->
-      {{-- <li class="menu-item">
+
+        <!-- Layouts -->
+        {{-- <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx bx-layout"></i>
           <div data-i18n="Layouts">Arus</div>
         </a>
       </li> --}}
     </ul>
-  </aside>
+</aside>

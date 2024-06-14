@@ -163,10 +163,24 @@
                 data: {
                     _token: csrfToken,
                     trafo_id: trafo_id,
-                    topic_name_zmct: MQTTsubTopiczmct,
                     topic_name_zmpt: MQTTsubTopiczmpt,
-                    zmctData: zmctDataArray,
                     zmptData: zmptDataArray
+                },
+                success: function(response) {
+                    console.log(response.message);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('store_arus') }}',
+                data: {
+                    _token: csrfToken,
+                    trafo_id: trafo_id,
+                    topic_name_zmct: MQTTsubTopiczmct,
+                    zmctData: zmctDataArray,
                 },
                 success: function(response) {
                     console.log(response.message);

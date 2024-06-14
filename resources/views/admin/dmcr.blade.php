@@ -44,10 +44,10 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-right">
                                     <div class="col-sm-8">
-                                        <h5 class="card-title text-primary">suhu</h5>
+                                        <h5 class="card-title text-primary">Suhu</h5>
                                     </div>
                                     <div class="col-sm-4">
-                                        <a href={{ route('cetak_suhu') }} class="btn btn-sm btn-outline-primary">Cetak
+                                        <a href="{{ route('cetak_suhu') }}" class="btn btn-sm btn-outline-primary">Cetak
                                             Data</a>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                         <h5 class="card-title text-primary">tekanan</h5>
                                     </div>
                                     <div class="col-sm-6">
-                                        <a href={{ route('cetak_tekanan') }} class="btn btn-sm btn-outline-primary">Cetak
+                                        <a href='{{ route('cetak_tekanan') }}' class="btn btn-sm btn-outline-primary">Cetak
                                             Data</a>
                                     </div>
                                 </div>
@@ -88,18 +88,20 @@
         var MQTTport = 8884; // Port WebSocket SSL/TLS untuk HiveMQ Cloud
         var MQTTpath = "/mqtt"; // Path untuk koneksi WebSocket MQTT
 
-        // var MQTTsubTopictekanan = 'tekanan';
-        var MQTTsubTopictekanan = '{{ $pilih_trafo->tekanan->topic_name }}';
+        // var MQTTsubTopicdmcr2 = 'dmcr2';
+        var MQTTsubTopicdmcr2 = '{{ $pilih_trafo->tekanan->topic_name }}';
 
-        var MQTTsubTopicsuhu = '{{ $pilih_trafo->suhu->topic_name }}';
+        var MQTTsubTopicdmcr1 = '{{ $pilih_trafo->suhu->topic_name }}';
+
 
         // var MQTTsubTopic1 = 'test/dht11/temp_c';
         // var MQTTsubTopic2 = 'test/dht11/humi';
         var MQTTusername = 'hivemq.webclient.1716793886740';
         var MQTTpassword = 'v>Km.sXx17<G8a!2HQwJ';
 
-        var suhuData = "";
-        var tekananData = "";
+        var dmcr1Data = "";
+        var dmcr2Data = "";
+
 
 
         // Fungsi untuk memperbarui grafik dengan data baru
@@ -119,43 +121,74 @@
             tekananChart.render();
         }
 
-        let suhuDataArray = [];
-        let tekananDataArray = [];
+        let dmcr1DataArray = [];
+        let dmcr2DataArray = [];
         let timeLabels = []; // Array untuk menyimpan label waktu
-
+        console.log("asjdnaksjdn" + dmcr1DataArray);
         // Di dalam fungsi onMessageArrived, panggil fungsi updatesuhuChart dengan data baru
         function onMessageArrived(message) {
             let currentTime = new Date();
             let formattedTime = currentTime.toLocaleString();
             // console.log('Message arrived: ' + message.payloadString);
             console.log('Message arrived at ' + currentTime + ': ' + message.payloadString);
-            if (message.destinationName == MQTTsubTopicsuhu) {
-                // Simpan data ke dalam variabel suhuData
-                suhuData = message.payloadString;
+            if (message.destinationName == MQTTsubTopicdmcr1) {
+                // Simpan data ke dalam variabel dmcr1Data
+                dmcr1Data = message.payloadString;
 
                 // function untuk menyimpan
 
                 timeLabels.push(formattedTime); // Simpan waktu penerimaan data
 
-                suhuDataArray.push(parseFloat(message.payloadString));
+                dmcr1DataArray.push(parseFloat(message.payloadString));
                 // Perbarui grafik dengan data baru
-                updatesuhuChart(suhuData);
+                updatesuhuChart(dmcr1Data);
                 updatePeriodeChart();
-            } else if (message.destinationName == MQTTsubTopictekanan) {
-                // Simpan data ke dalam variabel tekananData
-                tekananData = message.payloadString;
+            } else if (message.destinationName == MQTTsubTopicdmcr2) {
+                // Simpan data ke dalam variabel dmcr2Data
+                dmcr2Data = message.payloadString;
 
                 timeLabels.push(formattedTime); // Simpan waktu penerimaan data
 
-                tekananDataArray.push(parseFloat(message.payloadString));
-                updatetekananChart(tekananData)
+                dmcr2DataArray.push(parseFloat(message.payloadString));
+                updatetekananChart(dmcr2Data)
                 updatePeriodeChart();
-                // Jika Anda juga ingin memperbarui grafik untuk tekananData, tambahkan pemanggilan fungsi updatesuhuChart di sini
+                // Jika Anda juga ingin memperbarui grafik untuk dmcr2Data, tambahkan pemanggilan fungsi updatesuhuChart di sini
             }
-            console.log([
-                suhuDataArray,
-                tekananDataArray
-            ])
+
+            var trafo_id = window.location.href.split('/').pop();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('store_tekanan') }}',
+                data: {
+                    _token: csrfToken,
+                    trafo_id: trafo_id,
+                    topic_name_dmcr2: MQTTsubTopicdmcr2,
+                    dmcr2Data: dmcr2DataArray
+                },
+                success: function(response) {
+                    console.log(response.message);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('store_suhu') }}',
+                data: {
+                    _token: csrfToken,
+                    trafo_id: trafo_id,
+                    topic_name_dmcr1: MQTTsubTopicdmcr1,
+                    dmcr1Data: dmcr1DataArray
+                },
+                success: function(response) {
+                    console.log(response.message);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
         }
 
         let periodeChartTes = null;
@@ -163,11 +196,11 @@
         function updatePeriodeChart() {
             periodeChartTes.updateSeries([{
                     name: 'suhu',
-                    data: suhuDataArray
+                    data: dmcr1DataArray
                 },
                 {
                     name: 'tekanan',
-                    data: tekananDataArray
+                    data: dmcr2DataArray
                 }
             ]);
             periodeChartTes.updateOptions({
@@ -298,8 +331,8 @@
 
         function onConnect() {
             console.log('Connected to broker');
-            client.subscribe(MQTTsubTopicsuhu);
-            client.subscribe(MQTTsubTopictekanan);
+            client.subscribe(MQTTsubTopicdmcr1);
+            client.subscribe(MQTTsubTopicdmcr2);
         }
 
         function onConnectionLost(responseObject) {
@@ -336,7 +369,7 @@
         // suhu Chart / Radial Chart 
         const suhuChartEl = document.querySelector('#suhu1Chart');
         const suhuChartConfig = {
-            series: [suhuData],
+            series: [dmcr1Data],
             labels: ['suhu'],
             chart: {
                 width: 400,
@@ -416,7 +449,7 @@
         // tekanan Chart / Radial Chart 
         const tekananChart1El = document.querySelector('#tekanan1Chart');
         const tekananChart1Config = {
-            series: [tekananData],
+            series: [dmcr2Data],
             labels: ['tekanan'],
             chart: {
                 width: 400,

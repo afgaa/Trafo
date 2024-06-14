@@ -30,7 +30,7 @@ class TrafoSeeder extends Seeder
             // create arus data 
             $trafo->arus()->create([
                 // 'arus' => 2.5,
-                'topic_name' => 'tes',
+                'topic_name' => 'zmct',
             ]);
 
             // create suhu data
@@ -42,7 +42,7 @@ class TrafoSeeder extends Seeder
             // create tegangan data
             $trafo->tegangan()->create([
                 // 'tegangan' => 220,
-                'topic_name' => 'tes',
+                'topic_name' => 'zmpt',
             ]);
 
             // create tekanan data
