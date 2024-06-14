@@ -86,13 +86,13 @@
                 <div data-i18n="Basic">Trafo</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('admin_id_monitoring', 1) ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin_id_monitoring') ? 'active' : '' }}">
             <a href="{{ route('admin_id_monitoring', 1) }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cube"></i>
                 <div data-i18n="Basic">Monitoring</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('admin_id_dmcr') && request()->route('id') == 1 ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin_id_dmcr') ? 'active' : '' }}">
             <a href="{{ route('admin_id_dmcr', 1) }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cube"></i>
                 <div data-i18n="Basic">DMCR</div>
