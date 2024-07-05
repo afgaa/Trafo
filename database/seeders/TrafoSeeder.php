@@ -9,7 +9,7 @@ class TrafoSeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * @return void
+     * @return voida
      */
     public function run()
     {
@@ -19,7 +19,6 @@ class TrafoSeeder extends Seeder
         $trafoName = [
             'Trafo 1',
             'Trafo 2',
-            'Trafo 3',
         ];
 
         foreach ($trafoName as $trafo) {
@@ -27,10 +26,15 @@ class TrafoSeeder extends Seeder
                 'name' => $trafo
             ]);
 
+            // $table->string('topic_name_r');
+            // $table->string('topic_name_s');
+            // $table->string('topic_name_t');
             // create arus data 
             $trafo->arus()->create([
                 // 'arus' => 2.5,
-                'topic_name' => 'zmct',
+                'topic_name_r' => 'zmct',
+                'topic_name_s' => 'zmpt',
+                'topic_name_t' => 'dmcr1',
             ]);
 
             // create suhu data
@@ -42,7 +46,9 @@ class TrafoSeeder extends Seeder
             // create tegangan data
             $trafo->tegangan()->create([
                 // 'tegangan' => 220,
-                'topic_name' => 'zmpt',
+                'topic_name_r' => 'zmct',
+                'topic_name_s' => 'zmpt',
+                'topic_name_t' => 'dmcr1',
             ]);
 
             // create tekanan data

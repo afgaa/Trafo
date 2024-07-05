@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateArusValue extends Migration
+class CreateTabelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class UpdateArusValue extends Migration
      */
     public function up()
     {
-        Schema::table('arus', function (Blueprint $table) {
-            $table->double('value')->after('topic_name')->nullable();
+        Schema::create('tabels', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +26,6 @@ class UpdateArusValue extends Migration
      */
     public function down()
     {
-        Schema::table('arus', function (Blueprint $table) {
-            $table->dropColumn('value');
-        });
+        Schema::dropIfExists('tabels');
     }
 }

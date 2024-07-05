@@ -1,4 +1,4 @@
-@extends('layouts.admin.app2')
+@extends('layouts.user.app1')
 @section('title', $title)
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -10,7 +10,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h5 class="card-title text-primary">Monitoring DMCR</h5>
+                                        <h5 class="card-title text-primary">Monitoring Tegangan</h5>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="dropdown">
@@ -28,9 +28,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div id="periodesuhutekananChart"></div> --}}
+                                {{-- <div id="periodeArusTeganganChart"></div> --}}
                                 <div id="periodeChartTes"></div>
-                                <p class="mt-2"> Monitoring DMCR Sebelumnya</p>
+                                <p class="mt-2"> Monitoring Tegangan Sebelumnya</p>
                             </div>
                         </div>
                     </div>
@@ -44,40 +44,59 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-right">
                                     <div class="col-sm-8">
-                                        <h5 class="card-title text-primary">Suhu</h5>
+                                        <h5 class="card-title text-primary">Tegangan R</h5>
                                     </div>
                                     <div class="col-sm-4">
-                                        <a href="{{ route('cetak_suhu') }}" class="btn btn-sm btn-outline-primary">Cetak
-                                            Data</a>
+                                        {{-- <a href="{{ route('cetak_arusR') }}" class="btn btn-sm btn-outline-primary">Cetak
+                                            Data</a> --}}
                                     </div>
                                 </div>
-                                <div id="suhu1Chart"></div>
+                                <div id="arusRChart"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 mb-4 order-3">
+            <div class="col-lg-6 mb-4 order-1">
                 <div class="card">
                     <div class="d-flex align-items-end row">
                         <div class="col-sm-12">
                             <div class="card-body">
                                 <div class="row d-flex justify-content-right">
-                                    <div class="col-sm-6">
-                                        <h5 class="card-title text-primary">tekanan</h5>
+                                    <div class="col-sm-8">
+                                        <h5 class="card-title text-primary">Tegangan S</h5>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <a href='{{ route('cetak_tekanan') }}' class="btn btn-sm btn-outline-primary">Cetak
-                                            Data</a>
+                                    <div class="col-sm-4">
+                                        {{-- <a href="{{ route('cetak_arusS') }}" class="btn btn-sm btn-outline-primary">Cetak
+                                            Data</a> --}}
                                     </div>
                                 </div>
-                                <div id="tekanan1Chart"></div>
+                                <div id="arusSChart"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <div class="col-lg-6 mb-4 order-1">
+                <div class="card">
+                    <div class="d-flex align-items-end row">
+                        <div class="col-sm-12">
+                            <div class="card-body">
+                                <div class="row d-flex justify-content-right">
+                                    <div class="col-sm-8">
+                                        <h5 class="card-title text-primary">Tegangan T</h5>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{-- <a href="{{ route('cetak_arusT') }}" class="btn btn-sm btn-outline-primary">Cetak
+                                            Data</a> --}}
+                                    </div>
+                                </div>
+                                <div id="arusTChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection()
@@ -88,120 +107,136 @@
         var MQTTport = 8884; // Port WebSocket SSL/TLS untuk HiveMQ Cloud
         var MQTTpath = "/mqtt"; // Path untuk koneksi WebSocket MQTT
 
-        // var MQTTsubTopicdmcr2 = 'dmcr2';
-        var MQTTsubTopicdmcr2 = '{{ $pilih_trafo->tekanan->topic_name }}';
-
-        var MQTTsubTopicdmcr1 = '{{ $pilih_trafo->suhu->topic_name }}';
-
+        // var MQTTsubTopiczmpt = 'zmpt';
+        var MQTTsubTopicarusR = '{{ $pilih_trafo->tegangan->topic_name_r }}';
+        var MQTTsubTopicarusS = '{{ $pilih_trafo->tegangan->topic_name_s }}';
+        var MQTTsubTopicarusT = '{{ $pilih_trafo->tegangan->topic_name_t }}';
 
         // var MQTTsubTopic1 = 'test/dht11/temp_c';
         // var MQTTsubTopic2 = 'test/dht11/humi';
         var MQTTusername = 'hivemq.webclient.1716793886740';
         var MQTTpassword = 'v>Km.sXx17<G8a!2HQwJ';
 
-        var dmcr1Data = "";
-        var dmcr2Data = "";
-
+        var arusrData = "";
+        var arussData = "";
+        var arustData = "";
+        // var timeLabels = []; // Array untuk menyimpan label Waktu
 
 
         // Fungsi untuk memperbarui grafik dengan data baru
-        function updatesuhuChart(newData) {
+        function updateArusRChart(newData) {
             // Perbarui series dalam konfigurasi grafik dengan data baru
-            suhuChartConfig.series = [newData];
+            arusRChartConfig.series = [newData];
             // Render ulang grafik
-            const suhuChart = new ApexCharts(suhuChartEl, suhuChartConfig);
-            suhuChart.render();
+            const arusRChart = new ApexCharts(arusChartR, arusRChartConfig);
+            arusRChart.render();
+        }
+        // Fungsi untuk memperbarui grafik dengan data baru
+        function updateArusSChart(newData) {
+            // Perbarui series dalam konfigurasi grafik dengan data baru
+            arusSChartConfig.series = [newData];
+            // Render ulang grafik
+            const arusSChart = new ApexCharts(arusChartS, arusSChartConfig);
+            arusSChart.render();
+        }
+        // Fungsi untuk memperbarui grafik dengan data baru
+        function updateArusTChart(newData) {
+            // Perbarui series dalam konfigurasi grafik dengan data baru
+            arusTChartConfig.series = [newData];
+            // Render ulang grafik
+            const arusTChart = new ApexCharts(arusChartT, arusTChartConfig);
+            arusTChart.render();
         }
 
-        function updatetekananChart(newData) {
-            // Perbarui series dalam konfigurasi grafik dengan data baru
-            tekananChart1Config.series = [newData];
-            // Render ulang grafik
-            const tekananChart = new ApexCharts(tekananChart1El, tekananChart1Config);
-            tekananChart.render();
-        }
+        let arusrDataArray = [];
+        let arussDataArray = [];
+        let arustDataArray = [];
+        let addedDataR = false;
+        let addedDataS = false;
+        let addedDataT = false;
 
-        let dmcr1DataArray = [];
-        let dmcr2DataArray = [];
         let timeLabels = []; // Array untuk menyimpan label waktu
-        console.log("asjdnaksjdn" + dmcr1DataArray);
-        // Di dalam fungsi onMessageArrived, panggil fungsi updatesuhuChart dengan data baru
+        console.log("asjdnaksjdn" + arusrDataArray);
+        // Di dalam fungsi onMessageArrived, panggil fungsi updateArusChart dengan data baru
         function onMessageArrived(message) {
             let currentTime = new Date();
             let formattedTime = currentTime.toLocaleString();
             // console.log('Message arrived: ' + message.payloadString);
             console.log('Message arrived at ' + currentTime + ': ' + message.payloadString);
-            if (message.destinationName == MQTTsubTopicdmcr1) {
-                // Simpan data ke dalam variabel dmcr1Data
-                dmcr1Data = message.payloadString;
-
+            if (message.destinationName == MQTTsubTopicarusR) {
+                // Simpan data ke dalam variabel rData
+                arusrData = message.payloadString;
                 // function untuk menyimpan
-
                 timeLabels.push(formattedTime); // Simpan waktu penerimaan data
+                arusrDataArray.push(parseFloat(message.payloadString));
+                addedDataR = true;
 
-                dmcr1DataArray.push(parseFloat(message.payloadString));
                 // Perbarui grafik dengan data baru
-                updatesuhuChart(dmcr1Data);
+                updateArusRChart(arusrData);
                 updatePeriodeChart();
-            } else if (message.destinationName == MQTTsubTopicdmcr2) {
-                // Simpan data ke dalam variabel dmcr2Data
-                dmcr2Data = message.payloadString;
-
+            } else if (message.destinationName == MQTTsubTopicarusS) {
+                // Simpan data ke dalam variabel sData
+                arussData = message.payloadString;
                 timeLabels.push(formattedTime); // Simpan waktu penerimaan data
-
-                dmcr2DataArray.push(parseFloat(message.payloadString));
-                updatetekananChart(dmcr2Data)
+                arussDataArray.push(parseFloat(message.payloadString));
+                addedDataS = true;
+                // Perbarui grafik dengan data baru
+                updateArusSChart(arussData);
                 updatePeriodeChart();
-                // Jika Anda juga ingin memperbarui grafik untuk dmcr2Data, tambahkan pemanggilan fungsi updatesuhuChart di sini
-                console.log(dmcr1DataArray);
+            } else if (message.destinationName == MQTTsubTopicarusT) {
+                // Simpan data ke dalam variabel TData
+                arustData = message.payloadString;
+                timeLabels.push(formattedTime); // Simpan waktu penerimaan data
+                arustDataArray.push(parseFloat(message.payloadString));
+                addedDataT = true;
+                // Perbarui grafik dengan data baru
+                updateArusTChart(arustData)
+                updatePeriodeChart();
             }
 
             var trafo_id = window.location.href.split('/').pop();
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('store_tekanan') }}',
-                data: {
-                    _token: csrfToken,
-                    trafo_id: trafo_id,
-                    topic_name_dmcr2: MQTTsubTopicdmcr2,
-                    dmcr2Data: dmcr2DataArray
-                },
-                success: function(response) {
-                    console.log(response.message);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('store_suhu') }}',
-                data: {
-                    _token: csrfToken,
-                    trafo_id: trafo_id,
-                    topic_name_dmcr1: MQTTsubTopicdmcr1,
-                    dmcr1Data: dmcr1DataArray
-                },
-                success: function(response) {
-                    console.log(response.message);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+            if (addedDataR && addedDataS && addedDataT) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('store_tegangan_primo') }}',
+                    data: {
+                        _token: csrfToken,
+                        trafo_id: trafo_id,
+                        topic_name_arus_r: MQTTsubTopicarusR,
+                        topic_name_arus_s: MQTTsubTopicarusS,
+                        topic_name_arus_t: MQTTsubTopicarusT,
+                        arussDataS: arussDataArray.slice(-1)[0] || [], // Ambil data pada index akhir
+                        arusrDataR: arusrDataArray.slice(-1)[0] || [], // Ambil data pada index akhir
+                        arustDataT: arustDataArray.slice(-1)[0] || [], // Ambil data pada index akhir
+                    },
+                    success: function(response) {
+                        addedDataR = false;
+                        addedDataS = false;
+                        addedDataT = false;
+                        console.log(response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
         }
 
         let periodeChartTes = null;
 
         function updatePeriodeChart() {
             periodeChartTes.updateSeries([{
-                    name: 'suhu',
-                    data: dmcr1DataArray
+                    name: 'Tegangan R',
+                    data: arusrDataArray
                 },
                 {
-                    name: 'tekanan',
-                    data: dmcr2DataArray
+                    name: 'Tegangan S',
+                    data: arussDataArray
+                },
+                {
+                    name: 'Tegangan T',
+                    data: arustDataArray
                 }
             ]);
             periodeChartTes.updateOptions({
@@ -215,18 +250,23 @@
 
         cardColor = config.colors.white;
         headingColor = config.colors.headingColor;
-        axisColor = config.colors.axisColor;
+        axisColor = config.colors
+            .axisColor;
         borderColor = config.colors.borderColor;
 
-        // Periode Chart suhu dab tekanan
+        // Periode Chart Arus
         const periodeChartTesEl = document.querySelector('#periodeChartTes'),
             periodeChartTesConfig = {
                 series: [{
-                        name: 'suhu',
+                        name: 'Tegangan R',
                         data: []
                     },
                     {
-                        name: 'tekanan',
+                        name: 'Tegangan S',
+                        data: []
+                    },
+                    {
+                        name: 'Tegangan T',
                         data: []
                     },
                 ],
@@ -267,7 +307,7 @@
                         size: 7
                     }
                 },
-                colors: ['#fb8500', config.colors.primary, ], // Sesuaikan warna sesuai kebutuhan
+                colors: ['#fb8500', config.colors.primary, '#F000B8'], // Sesuaikan warna sesuai kebutuhan
                 fill: {
                     type: 'gradient',
                     gradient: {
@@ -329,11 +369,12 @@
             periodeChartTes.render();
         }
 
-
         function onConnect() {
+            console.log("tes");
             console.log('Connected to broker');
-            client.subscribe(MQTTsubTopicdmcr1);
-            client.subscribe(MQTTsubTopicdmcr2);
+            client.subscribe(MQTTsubTopicarusR);
+            client.subscribe(MQTTsubTopicarusS);
+            client.subscribe(MQTTsubTopicarusT);
         }
 
         function onConnectionLost(responseObject) {
@@ -367,11 +408,159 @@
         }
 
 
-        // suhu Chart / Radial Chart 
-        const suhuChartEl = document.querySelector('#suhu1Chart');
-        const suhuChartConfig = {
-            series: [dmcr1Data],
-            labels: ['C'],
+        // Arus R Chart / Radial Chart 
+        const arusChartR = document.querySelector('#arusRChart');
+        const arusRChartConfig = {
+            series: [arusrData],
+            labels: ['Tegangan R'],
+            chart: {
+                width: 400,
+                height: 450,
+                type: 'radialBar',
+                offsetY: -20, // Offset untuk membuat setengah lingkaran
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -90,
+                    endAngle: 90,
+                    strokeWidth: '8',
+                    hollow: {
+                        margin: 2,
+                        size: '48%'
+                    },
+                    track: {
+                        strokeWidth: '50%',
+                        background: '#ddd'
+                    },
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: 15,
+                            color: '#697a8d',
+                            fontSize: '15px',
+                            fontWeight: '600',
+                            fontFamily: 'Arial'
+                        },
+                        value: {
+                            offsetY: -25,
+                            color: '#697a8d',
+                            fontSize: '32px',
+                            fontWeight: '700',
+                            fontFamily: 'Arial',
+                            formatter: function(val) {
+                                return val; // Mengembalikan nilai tanpa persentase
+                            }
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'solid',
+                colors: ['#fb8500']
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            grid: {
+                padding: {
+                    top: -10,
+                    bottom: -15,
+                    left: -10,
+                    right: -10
+                }
+            },
+            states: {
+                hover: {
+                    filter: {
+                        type: 'none'
+                    }
+                },
+                active: {
+                    filter: {
+                        type: 'none'
+                    }
+                }
+            }
+        };
+        // Arus S Chart / Radial Chart 
+        const arusChartS = document.querySelector('#arusSChart');
+        const arusSChartConfig = {
+            series: [arussData],
+            labels: ['Tegangan S'],
+            chart: {
+                width: 400,
+                height: 450,
+                type: 'radialBar',
+                offsetY: -20, // Offset untuk membuat setengah lingkaran
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -90,
+                    endAngle: 90,
+                    strokeWidth: '8',
+                    hollow: {
+                        margin: 2,
+                        size: '48%'
+                    },
+                    track: {
+                        strokeWidth: '50%',
+                        background: '#ddd'
+                    },
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: 15,
+                            color: '#697a8d',
+                            fontSize: '15px',
+                            fontWeight: '600',
+                            fontFamily: 'Arial'
+                        },
+                        value: {
+                            offsetY: -25,
+                            color: '#697a8d',
+                            fontSize: '32px',
+                            fontWeight: '700',
+                            fontFamily: 'Arial',
+                            formatter: function(val) {
+                                return val; // Mengembalikan nilai tanpa persentase
+                            }
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'solid',
+                colors: ['#fb8500']
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            grid: {
+                padding: {
+                    top: -10,
+                    bottom: -15,
+                    left: -10,
+                    right: -10
+                }
+            },
+            states: {
+                hover: {
+                    filter: {
+                        type: 'none'
+                    }
+                },
+                active: {
+                    filter: {
+                        type: 'none'
+                    }
+                }
+            }
+        };
+        // Arus S Chart / Radial Chart 
+        const arusChartT = document.querySelector('#arusTChart');
+        const arusTChartConfig = {
+            series: [arustData],
+            labels: ['Tegangan T'],
             chart: {
                 width: 400,
                 height: 450,
@@ -442,91 +631,21 @@
             }
         };
 
-        if (typeof suhuEl !== undefined && suhuChartEl !== null) {
-            const suhuChart = new ApexCharts(suhuChartEl, suhuChartConfig);
-            suhuChart.render();
+
+        // Arus R Chart / Radial Chart 
+        if (typeof arusrEl !== undefined && arusChartR !== null) {
+            const arusRChart = new ApexCharts(arusChartR, arusRChartConfig);
+            arusRChart.render();
         }
-
-        // tekanan Chart / Radial Chart 
-        const tekananChart1El = document.querySelector('#tekanan1Chart');
-        const tekananChart1Config = {
-            series: [dmcr2Data],
-            labels: ['Bar'],
-            chart: {
-                width: 400,
-                height: 450,
-                type: 'radialBar',
-                offsetY: -20, // Offset untuk membuat setengah lingkaran
-            },
-            plotOptions: {
-                radialBar: {
-                    startAngle: -90,
-                    endAngle: 90,
-                    strokeWidth: '8',
-                    hollow: {
-                        margin: 2,
-                        size: '48%'
-                    },
-                    track: {
-                        strokeWidth: '50%',
-                        background: '#ddd'
-                    },
-                    dataLabels: {
-                        show: true,
-                        name: {
-                            offsetY: 15,
-                            color: '#697a8d',
-                            fontSize: '15px',
-                            fontWeight: '600',
-                            fontFamily: 'Arial'
-                        },
-                        value: {
-                            offsetY: -25,
-                            color: '#697a8d',
-                            fontSize: '32px',
-                            fontWeight: '700',
-                            fontFamily: 'Arial',
-                            formatter: function(val) {
-                                return val; // Mengembalikan nilai tanpa persentase
-                            }
-                        }
-                    },
-                    min: 0, // Nilai minimum
-                    max: 250 // Nilai maksimum
-                }
-            },
-            fill: {
-                type: 'solid',
-                colors: [config.colors.primary]
-            },
-            stroke: {
-                lineCap: 'round'
-            },
-            grid: {
-                padding: {
-                    top: -10,
-                    bottom: -15,
-                    left: -10,
-                    right: -10
-                }
-            },
-            states: {
-                hover: {
-                    filter: {
-                        type: 'none'
-                    }
-                },
-                active: {
-                    filter: {
-                        type: 'none'
-                    }
-                }
-            }
-        };
-
-        if (typeof tekananChart1El !== undefined && tekananChart1El !== null) {
-            const tekananChart1 = new ApexCharts(tekananChart1El, tekananChart1Config);
-            tekananChart1.render();
+        // Arus S Chart / Radial Chart 
+        if (typeof arussEl !== undefined && arusChartS !== null) {
+            const arusSChart = new ApexCharts(arusChartS, arusSChartConfig);
+            arusSChart.render();
+        }
+        // Arus T Chart / Radial Chart 
+        if (typeof arustEl !== undefined && arusChartT !== null) {
+            const arusTChart = new ApexCharts(arusChartT, arusTChartConfig);
+            arusTChart.render();
         }
     </script>
 @endsection

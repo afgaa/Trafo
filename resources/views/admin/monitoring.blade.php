@@ -77,7 +77,26 @@
                     </div>
                 </div>
             </div>
-
+            <div class="col-lg-6 mb-4 order-3">
+                <div class="card">
+                    <div class="d-flex align-items-end row">
+                        <div class="col-sm-12">
+                            <div class="card-body">
+                                <div class="row d-flex justify-content-right">
+                                    <div class="col-sm-6">
+                                        <h5 class="card-title text-primary">Tegangan T</h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a href='{{ route('cetak_tegangan') }}' class="btn btn-sm btn-outline-primary">Cetak
+                                            Data</a>
+                                    </div>
+                                </div>
+                                <div id="teganganTChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection()
@@ -153,6 +172,7 @@
                 updateTeganganChart(zmptData)
                 updatePeriodeChart();
                 // Jika Anda juga ingin memperbarui grafik untuk zmptData, tambahkan pemanggilan fungsi updateArusChart di sini
+                console.log(zmctDataArray);
             }
 
             var trafo_id = window.location.href.split('/').pop();
@@ -522,6 +542,7 @@
                 }
             }
         };
+
 
         if (typeof teganganChart1El !== undefined && teganganChart1El !== null) {
             const teganganChart1 = new ApexCharts(teganganChart1El, teganganChart1Config);

@@ -51,14 +51,14 @@ class DMCRAdminController extends Controller
     public function storeSuhu(Request $request)
     {
         $trafo_id = $request->input('trafo_id');
-        $dmcr1ataArray = $request->input('dmcr1Data');
-        $topicNameDmcr = $request->input('topic_name_dmcr1');
+        $dmcr1DataArray = $request->input('dmcr1Data');
+        $topicNameDmcr1 = $request->input('topic_name_dmcr1');
 
         // dd(["topic_name_dmcr2"=>$topic_name_dmcr2,"topic_name_zmpt"=>$topic_name_zmpt,"dmcr2Data"=>$dmcr2Data,"zmptData"=>$zmptData]);
 
         // Simpan data zmpt
-        foreach ($dmcr1DataArray as $zmptData) {
-            Tegangan::create([
+        foreach ($dmcr1DataArray as $dmcr1Data) {
+            Suhu::create([
                 'trafo_id' => $trafo_id, // Ganti dengan ID trafo yang sesuai
                 'topic_name' => $topicNameDmcr1,
                 'value' => $dmcr1Data,
@@ -68,17 +68,18 @@ class DMCRAdminController extends Controller
         return response()->json(['message' => 'Data saved successfully']);
     }
 
+
     public function storeTekanan(Request $request)
     {
         $trafo_id = $request->input('trafo_id');
         $dmcr2DataArray = $request->input('dmcr2Data');
-        $topicNameDmcr2 = $request->input('topic_name_dmcr');
+        $topicNameDmcr2 = $request->input('topic_name_dmcr2');
 
         // dd(["topic_name_dmcr2"=>$topic_name_dmcr2,"topic_name_zmpt"=>$topic_name_zmpt,"dmcr2Data"=>$dmcr2Data,"zmptData"=>$zmptData]);
 
         // Simpan data ke dalam database
         foreach ($dmcr2DataArray as $dmcr2Data) {
-            Tegangan::create([
+            Tekanan::create([
                 'trafo_id' => $trafo_id, // Ganti dengan ID trafo yang sesuai
                 'topic_name' => $topicNameDmcr2,
                 'value' => $dmcr2Data,

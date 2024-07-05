@@ -11,18 +11,16 @@ class Arus extends Model
     use HasFactory;
     protected $table='arus';
     protected $primaryKey = 'id';
-
+    
     protected $fillable = [
-        'trafo_id',
-        // 'arus',
-        'topic_name',
-        'value'
+        'trafo_id', 
+        'topic_name_r', 
+        'topic_name_s', 
+        'topic_name_t',
+        'value_r',
+        'value_s',
+        'value_t',
     ];
-    // public function gps()
-    // {
-    //     return $this->belongsTo(GPS::class, 'trafo_id');
-    // }
-
     // make relation to trafo
     public function trafo()
     {

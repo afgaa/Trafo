@@ -24,25 +24,62 @@
                             </div>
                             {{-- arus --}}
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-fullname">Arus Topic Name</label>
+                                <label class="form-label" for="basic-icon-default-fullname">Arus R</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
-                                    <input type="text" class="form-control" id="arus_topic_name" aria-describedby="name"
-                                        name="arus_topic_name" />
+                                    <input type="text" class="form-control" aria-describedby="name"
+                                        name="arus_topic_name_r" />
+                                </div>
+                            </div>
+                            {{-- arus s --}}
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Arus S</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
+                                    <input type="text" class="form-control" aria-describedby="name"
+                                        name="arus_topic_name_s" />
+                                </div>
+                            </div>
+                            {{-- arus t --}}
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Arus T</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
+                                    <input type="text" class="form-control" aria-describedby="name"
+                                        name="arus_topic_name_t" />
+                                </div>
+                            </div>
+
+                            {{-- tegangan --}}
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Tegangan R</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
+                                    <input type="text" class="form-control" aria-describedby="name"
+                                        name="tegangan_topic_name_r" />
                                 </div>
                             </div>
                             {{-- tegangan --}}
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-fullname">Tegangan Topic Name</label>
+                                <label class="form-label" for="basic-icon-default-fullname">Tegangan S</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
-                                    <input type="text" class="form-control" id="tegangan_topic_name"
-                                        aria-describedby="name" name="tegangan_topic_name" />
+                                    <input type="text" class="form-control" aria-describedby="name"
+                                        name="tegangan_topic_name_s" />
+                                </div>
+                            </div>
+                            {{-- tegangan --}}
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Tegangan T</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
+                                    <input type="text" class="form-control" aria-describedby="name"
+                                        name="tegangan_topic_name_t" />
                                 </div>
                             </div>
                             {{-- suhu --}}
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-fullname">Suhu Topic Name</label>
+                                <label class="form-label" for="basic-icon-default-fullname">Suhu</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
                                     <input type="text" class="form-control" id="suhu_topic_name" aria-describedby="name"
@@ -51,7 +88,7 @@
                             </div>
                             {{-- tekanan --}}
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-fullname">Tekanan Topic Name</label>
+                                <label class="form-label" for="basic-icon-default-fullname">Tekanan</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="bx bx-home-alt"></i></span>
                                     <input type="text" class="form-control" id="tekanan_topic_name"

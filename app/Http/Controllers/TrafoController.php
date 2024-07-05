@@ -43,34 +43,50 @@ class TrafoController extends Controller
      */
     public function store(Request $request)
     {
+         // Validate the request
         $validated = $request->validate([
             'trafo_name' => 'required',
-            'arus_topic_name' => 'required',
-            'tegangan_topic_name' => 'required',
+            'arus_topic_name_r' => 'required',
+            'arus_topic_name_s' => 'required',
+            'arus_topic_name_t' => 'required',
+            'tegangan_topic_name_r' => 'required',
+            'tegangan_topic_name_s' => 'required',
+            'tegangan_topic_name_t' => 'required',
             'suhu_topic_name' => 'required',
             'tekanan_topic_name' => 'required',
         ]);
+        // dd($validated);
 
+        // Create a new trafo
         $trafo = Trafo::create([
-            'name' => $request->trafo_name,
+            'name' => $validated['trafo_name'],
         ]);
 
+        // Create arus data for R, S, T phases
         $trafo->arus()->create([
-            'topic_name' => $request->arus_topic_name,
+            'topic_name_r' => $validated['arus_topic_name_r'],
+            'topic_name_s' => $validated['arus_topic_name_s'],
+            'topic_name_t' => $validated['arus_topic_name_t'],
         ]);
 
-        $trafo->suhu()->create([
-            'topic_name' => $request->suhu_topic_name,
-        ]);
-
+        // Create tegangan data for R, S, T phases
         $trafo->tegangan()->create([
-            'topic_name' => $request->tegangan_topic_name,
+            'topic_name_r' => $validated['tegangan_topic_name_r'],
+            'topic_name_s' => $validated['tegangan_topic_name_s'],
+            'topic_name_t' => $validated['tegangan_topic_name_t'],
         ]);
 
+        // Create suhu data
+        $trafo->suhu()->create([
+            'topic_name' => $validated['suhu_topic_name'],
+        ]);
+
+        // Create tekanan data
         $trafo->tekanan()->create([
-            'topic_name' => $request->tekanan_topic_name,
+            'topic_name' => $validated['tekanan_topic_name'],
         ]);
 
+        // Redirect with success message
         return redirect()->route('trafo.index')->with('success', 'Data Trafo Berhasil Ditambahkan');
     }
 
@@ -106,41 +122,65 @@ class TrafoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'trafo_name' => 'required',
-            'arus_topic_name' => 'required',
-            'tegangan_topic_name' => 'required',
-            'suhu_topic_name' => 'required',
-            'tekanan_topic_name' => 'required',
-        ]);
+{
+    $validated = $request->validate([
+        'trafo_name' => 'required',
+        'arusr_topic_name' => 'required',
+        'aruss_topic_name' => 'required',
+        'arust_topic_name' => 'required',
+        'teganganr_topic_name' => 'required',
+        'tegangans_topic_name' => 'required',
+        'tegangant_topic_name' => 'required',
+        'suhu_topic_name' => 'required',
+        'tekanan_topic_name' => 'required',
+    ]);
 
-        $trafo = Trafo::find($id);
+    $trafo = Trafo::find($id);
 
-        
-        $trafo->update([
-            'name' => $request->trafo_name,
-        ]);
-
-        $trafo->arus()->update([
-            'topic_name' => $request->arus_topic_name,
-        ]);
-
-        $trafo->suhu()->update([
-            'topic_name' => $request->suhu_topic_name,
-        ]);
-
-        $trafo->tegangan()->update([
-            'topic_name' => $request->tegangan_topic_name,
-        ]);
-
-        $trafo->tekanan()->update([
-            'topic_name' => $request->tekanan_topic_name,
-        ]);
-
-        //jika data berhasil diupdate, akan kembali ke halaman utama
-        return redirect()->route('trafo.index')->with('success', 'Data Trafo Berhasil Diupdate');
+    if (!$trafo) {
+        return redirect()->back()->withErrors(['message' => 'Trafo not found']);
     }
+
+    $trafo->update([
+        'name' => $validated['trafo_name'],
+    ]);
+
+    // Update arus data for R, S, T phases
+    $trafo->arus()->updateOrCreate(
+        ['trafo_id' => $trafo->id],
+        [
+            'topic_name_r' => $validated['arusr_topic_name'],
+            'topic_name_s' => $validated['aruss_topic_name'],
+            'topic_name_t' => $validated['arust_topic_name'],
+        ]
+    );
+
+    // Update suhu data
+    $trafo->suhu()->updateOrCreate(
+        ['trafo_id' => $trafo->id],
+        ['topic_name' => $validated['suhu_topic_name']]
+    );
+
+    // Update tegangan data for R, S, T phases
+    $trafo->tegangan()->updateOrCreate(
+        ['trafo_id' => $trafo->id],
+        [
+            'topic_name_r' => $validated['teganganr_topic_name'],
+            'topic_name_s' => $validated['tegangans_topic_name'],
+            'topic_name_t' => $validated['tegangant_topic_name'],
+        ]
+    );
+
+    // Update tekanan data
+    $trafo->tekanan()->updateOrCreate(
+        ['trafo_id' => $trafo->id],
+        ['topic_name' => $validated['tekanan_topic_name']]
+    );
+
+    // Redirect with success message
+    return redirect()->route('trafo.index')->with('success', 'Data Trafo Berhasil Diperbarui');
+}
+
 
     /**
      * Remove the specified resource from storage.

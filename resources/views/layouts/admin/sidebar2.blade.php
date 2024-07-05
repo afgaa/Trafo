@@ -86,10 +86,16 @@
                 <div data-i18n="Basic">Trafo</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('admin_id_monitoring') ? 'active' : '' }}">
-            <a href="{{ route('admin_id_monitoring', 1) }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin_id_arus') ? 'active' : '' }}">
+            <a href="{{ route('admin_id_arus', 1) }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cube"></i>
-                <div data-i18n="Basic">Monitoring</div>
+                <div data-i18n="Basic">Arus</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('admin_id_tegangan') ? 'active' : '' }}">
+            <a href="{{ route('admin_id_tegangan', 1) }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube"></i>
+                <div data-i18n="Basic">Tegangan</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('admin_id_dmcr') ? 'active' : '' }}">
@@ -98,6 +104,12 @@
                 <div data-i18n="Basic">DMCR</div>
             </a>
         </li>
+        {{-- <li class="menu-item">
+            <a href="" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube"></i>
+                <div data-i18n="Basic">GIS</div>
+            </a>
+        </li> --}}
         <li class="menu-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
             <a href="{{ route('user.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cube"></i>

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Exports\TeganganExport;
 use App\Exports\ArusExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\GPS;
 use App\Models\Arus;
 use App\Models\Tegangan;
 use App\Models\Trafo;

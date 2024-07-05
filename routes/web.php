@@ -10,6 +10,11 @@ use App\Http\Controllers\TrafoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DMCRAdminController;
 use App\Http\Controllers\MonitoringAdminController;
+use App\Http\Controllers\ArusController;
+use App\Http\Controllers\TeganganController;
+use App\Http\Controllers\UserArusController;
+use App\Http\Controllers\UserTeganganController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +67,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/arus/store', [MonitoringAdminController::class, 'storeArus'])->name('store_arus');
         Route::post('/suhu/store', [DMCRAdminController::class, 'storeSuhu'])->name('store_suhu');
         Route::post('/tekanan/store', [DMCRAdminController::class, 'storeTekanan'])->name('store_tekanan');
-        
+
+        //ARUS R S T
+        Route::get('/arus/{id_trafo}', [ArusController::class, 'filter_trafo'])->name('admin_id_arus');
+        Route::post('/arus/store_primo', [ArusController::class, 'storeArus'])->name('store_arus_primo');
+        //TEGANGAN R S T 
+        Route::get('/tegangan/{id_trafo}', [TeganganController::class, 'filter_trafo'])->name('admin_id_tegangan');
+        Route::post('/tegangan/store_primo', [TeganganController::class, 'storeTegangan'])->name('store_tegangan_primo');
     });
 
     // Route untuk user
@@ -72,6 +83,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/monitoring/{id_trafo}', [MonitoringController::class, 'filter_trafo'])->name('id_monitoring');
         // Route::get('/dmcr', [DMCRController::class, 'index'])->name('dmcr');
         Route::get('/dmcr/{id_trafo}', [DMCRController::class, 'filter_trafo'])->name('id_dmcr');
+
         
+        Route::get('/userarus/{id_trafo}', [UserArusController::class, 'filter_trafo'])->name('arus');
+        Route::get('/usertegangan/{id_trafo}', [UserTeganganController::class, 'filter_trafo'])->name('tegangan');
     });
 });

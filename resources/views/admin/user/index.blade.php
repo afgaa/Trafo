@@ -22,7 +22,7 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Email</th>
-                            <th>Status</th>
+                            {{-- <th>Status</th> --}}
                             <th style="text-align: center">Aksi</th>
                         </tr>
                     </thead>
@@ -33,13 +33,13 @@
                                 <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
                                     <strong>{{ $user->name }}</strong></td>
                                 <td>{{ $user->email }}</td>
-                                <td>
+                                {{-- <td>
                                     @if ($user->role == 1 or $user->role == 2)
                                         <span class="badge bg-label-primary me-1">Aktif</span>
                                     @else
                                         <span class="badge bg-label-warning me-1">Off</span>
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>
                                     <form action="{{ route('user.destroy', $user->id) }}" method="POST">
                                         <a class="btn btn-warning" href="{{ route('user.edit', $user->id) }}">
